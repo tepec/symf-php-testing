@@ -5,8 +5,8 @@ ENV WORKDIR "/var/www/app"
 RUN apk upgrade --update && apk --no-cache add \
     git autoconf tzdata openntpd libcurl curl-dev coreutils \
     libmcrypt-dev freetype-dev libxpm-dev libjpeg-turbo-dev libvpx-dev \
-    libpng-dev libxml2-dev icu-dev \
-    $PHPIZE_DEPS \ openssl-dev
+    libpng-dev libxml2-dev icu-dev openssl-dev \
+    $PHPIZE_DEPS
 
 RUN docker-php-ext-configure intl \
     && docker-php-ext-configure opcache \
