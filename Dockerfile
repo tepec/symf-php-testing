@@ -5,7 +5,8 @@ ENV WORKDIR "/var/www/app"
 RUN apk upgrade --update && apk --no-cache add \
     git autoconf tzdata openntpd libcurl curl-dev coreutils \
     libmcrypt-dev freetype-dev libxpm-dev libjpeg-turbo-dev libvpx-dev \
-    libpng-dev libxml2-dev icu-dev
+    libpng-dev libxml2-dev icu-dev \
+    $PHPIZE_DEPS \ openssl-dev
 
 RUN docker-php-ext-configure intl \
     && docker-php-ext-configure opcache \
@@ -13,8 +14,12 @@ RUN docker-php-ext-configure intl \
     --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ \
     --with-xpm-dir=/usr/include/
 
+RUN pecl install mcrypt-1.0.1
+
 RUN docker-php-ext-install -j$(nproc) gd iconv pdo pdo_mysql curl \
-    bcmath mcrypt mbstring json xml xmlrpc zip intl opcache
+    bcmath mbstring json xml xmlrpc zip intl opcache
+    
+RUN docker-php-ext-enable mcrypt
 
 # Add timezone
 RUN rm /etc/localtime && \
